@@ -67,8 +67,8 @@ public class ModelManager implements ModelService {
 	public void update(UpdateModelRequest updateModelRequest) {
 		
 		this.modelBusinessRules.checkIfModelIdExists(updateModelRequest.getId());
-		this.modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 		this.brandBusinessRules.checkIfBrandIdExists(updateModelRequest.getBrandId());
+		this.modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 		
 		Brand brand = this.brandRepository.findById(updateModelRequest.getBrandId()).get();
 		

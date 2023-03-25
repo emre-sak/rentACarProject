@@ -57,7 +57,7 @@ public class CarManager implements CarService {
 	@Override
 	public void add(CreateCarRequest createCarRequest) {
 
-		this.modelBusinessRules.checkIfModelIdExists(createCarRequest.getModelId());
+		this.carBusinessRules.checkIfModelIdExists(createCarRequest.getModelId());
 
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 
