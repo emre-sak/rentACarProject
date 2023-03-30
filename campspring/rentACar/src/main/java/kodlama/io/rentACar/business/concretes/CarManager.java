@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import kodlama.io.rentACar.business.abstracts.CarService;
+import kodlama.io.rentACar.business.abstracts.ModelService;
 import kodlama.io.rentACar.business.requests.CreateCarRequest;
 import kodlama.io.rentACar.business.requests.UpdateCarRequest;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
@@ -14,7 +15,6 @@ import kodlama.io.rentACar.business.rules.CarBusinessRules;
 import kodlama.io.rentACar.business.rules.ModelBusinessRules;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
 import kodlama.io.rentACar.dataAccess.abstracts.CarRepository;
-import kodlama.io.rentACar.dataAccess.abstracts.ModelRepository;
 import kodlama.io.rentACar.entities.concretes.Car;
 import kodlama.io.rentACar.entities.concretes.Model;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class CarManager implements CarService {
 
 	private CarRepository carRepository;
-	private ModelRepository modelRepository;
+	private ModelService modelService;
 	private ModelMapperService modelMapperService;
 	private CarBusinessRules carBusinessRules;
 	private ModelBusinessRules modelBusinessRules;
@@ -71,7 +71,7 @@ public class CarManager implements CarService {
 		this.carBusinessRules.checkIfCarIdExists(updateCarRequest.getId());
 		this.modelBusinessRules.checkIfModelIdExists(updateCarRequest.getModelId());
 
-		Model model = this.modelRepository.findById(updateCarRequest.getModelId()).get();
+		Model model = this.modelMapperService.forResponse().map(modelService.getById(updateCarRequest.getModelId()), Model.class);
 
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		car.setModel(model);

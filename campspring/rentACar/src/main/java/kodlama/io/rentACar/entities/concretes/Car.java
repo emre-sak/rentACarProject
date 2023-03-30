@@ -34,7 +34,7 @@ public class Car {
 	private int modelYear;
 	
 	@Column(name="state")
-	private int state; // Arabanın durumu. 1- avaible 2- rented 3- maintenance
+	private int state; // Condition of the car. 1- avaible 2- rented 3- maintenance
 	
 	@ManyToOne
 	@JoinColumn(name="model_id")

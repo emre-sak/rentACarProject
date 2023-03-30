@@ -3,6 +3,8 @@ package kodlama.io.rentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+
+import kodlama.io.rentACar.business.abstracts.BrandService;
 import kodlama.io.rentACar.business.abstracts.ModelService;
 import kodlama.io.rentACar.business.requests.CreateModelRequest;
 import kodlama.io.rentACar.business.requests.UpdateModelRequest;
@@ -11,7 +13,6 @@ import kodlama.io.rentACar.business.responses.GetByIdModelResponse;
 import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.business.rules.ModelBusinessRules;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
-import kodlama.io.rentACar.dataAccess.abstracts.BrandRepository;
 import kodlama.io.rentACar.dataAccess.abstracts.ModelRepository;
 import kodlama.io.rentACar.entities.concretes.Brand;
 import kodlama.io.rentACar.entities.concretes.Model;
@@ -22,7 +23,7 @@ import lombok.AllArgsConstructor;
 public class ModelManager implements ModelService { 
 
 	private ModelRepository modelRepository;
-	private BrandRepository brandRepository;
+	private BrandService brandService;
 	private ModelMapperService modelMapperService;
 	private ModelBusinessRules modelBusinessRules;
 	private BrandBusinessRules brandBusinessRules;
@@ -70,7 +71,7 @@ public class ModelManager implements ModelService {
 		this.modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 		this.brandBusinessRules.checkIfBrandIdExists(updateModelRequest.getBrandId());
 		
-		Brand brand = this.brandRepository.findById(updateModelRequest.getBrandId()).get();
+		Brand brand = this.modelMapperService.forResponse().map(brandService.getById(updateModelRequest.getBrandId()), Brand.class);
 		
 		Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
 		model.setBrand(brand);
